@@ -2,20 +2,18 @@ require 'airport'
 
 describe Airport do
 
-  it 'displays the planes in the airport' do
-    expect(subject.display_planes).to eq []
-  end
-
 
   describe '#land' do
 
     it 'raises an error when trying to land in stormy weather' do
-      plane = Plane.new('name')
+      plane = Plane.new
+      allow(subject).to receive(:stormy).and_return(true)
       expect{subject.land(plane)}.to raise_error 'Weather is stormy, cannot land plane'
     end
 
     it 'lands a plane' do
-      plane = Plane.new('name')
+      plane = Plane.new
+      allow(subject).to receive(:stormy).and_return(false)
       expect(subject.land(plane)).to eq [plane]
     end
 
@@ -25,29 +23,32 @@ describe Airport do
   describe '#take_off' do
 
     it 'raises an error when trying to take off in stormy weather' do
-      plane = Plane.new('name')
+      plane = Plane.new
+      allow(subject).to receive(:stormy).and_return(true)
       expect{subject.take_off(plane)}.to raise_error 'Weather is stormy, cannot take off'
     end
 
     it 'takes off a plane' do
-      plane = Plane.new('name')
-      expect(subject.take_off(plane)).to eq plane
+      plane = Plane.new
+      allow(subject).to receive(:stormy).and_return(false)
+      subject.land(plane)
+      subject.take_off(plane)
+      expect(subject.airport).to eq []
     end
 
   end
 
 
-  describe '#weather' do
+  describe '#stormy' do
 
-    it 'checks if the weather is sunny' do
-      # below line is a stub
-      allow(subject).to receive(:rand).and_return(0)
-      expect(subject.weather).to eq('Sunny')
-    end
-
-    it 'checks if the weather is stormy' do
-      allow(subject).to receive(:rand).and_return(4)
-      expect(subject.weather).to eq('Stormy')
+    it 'checks that it will be stormy 20% of the time' do
+      count = 0
+      10000.times do
+        if subject.stormy
+          count += 1
+        end
+      end
+      expect(count).to be_within(100).of(2000)
     end
 
   end
