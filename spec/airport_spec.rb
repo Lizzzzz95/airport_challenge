@@ -33,7 +33,7 @@ describe Airport do
       allow(subject).to receive(:stormy).and_return(false)
       subject.land(plane)
       subject.take_off(plane)
-      expect(subject.airport).to eq []
+      expect(subject.planes).to eq []
     end
 
   end

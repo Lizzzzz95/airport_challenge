@@ -3,24 +3,24 @@ require_relative 'traffic_controller'
 
 class Airport
 
-  attr_reader :plane, :airport
+  attr_reader :planes
 
   def initialize
-    @airport = []
+    @planes = []
   end
 
   def land(plane)
     if stormy
-      fail 'Weather is stormy, cannot land plane'
+      raise 'Weather is stormy, cannot land plane'
     end
-    @airport.push(plane)
+    @planes.push(plane)
   end
 
   def take_off(plane)
     if stormy
-      fail 'Weather is stormy, cannot take off'
+      raise 'Weather is stormy, cannot take off'
     end
-    @airport.delete(plane)
+    @planes.delete(plane)
   end
 
   def stormy
